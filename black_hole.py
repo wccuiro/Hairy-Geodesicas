@@ -56,6 +56,9 @@ class black_hole():
         return df
     def estado(self):
         return "La masa del BH es: ", self.masa(), "\nEl horizonte hairy es: ", self.horizonte_hairy(), "\nEl horizonte tipo Schwarzschild es: ", self.horizonte()
+    
+    
+    
 class particula_time_like(black_hole):
     def __init__(self,alpha0,eta0,nu0,energia0,J0):
         super().__init__(alpha0,eta0,nu0)
@@ -97,17 +100,19 @@ class particula_time_like(black_hole):
         x_inicial=float(self.horizonte_hairy_x())+0.6
         x_nulo=fsolve(self.U_potencial,x_inicial)
         return self.omega(x_nulo)**(0.5),self.U_potencial(x_nulo)
-    def velo_init (self,r):
-        x_initial_guess = 0.8
+    def cond_init (self,r):
+        x_initial_guess = 0.83
         O_r= lambda x: self.nu ** 2 * x ** (self.nu - 1) / self.eta ** 2 / (x ** self.nu - 1) ** 2-r**2
         x_radio = fsolve(O_r, x_initial_guess)
         x_prima=ma.sqrt((self.energia-self.U_potencial(x_radio))/(self.eta**2*self.J**2*self.__c**2))
-        return x_prima
+        return x_radio, x_prima
     def funH (self,x):
-        H=self.diff_U/(2*self.J**2*self.__c**2*self.eta**2)
+        H=self.diff_U(x)/(2*self.J**2*self.__c**2*self.eta**2)
         return H
     def x_turn_r (self,x):
         return self.omega(x)**0.5
+    
+    
 class particula_null(black_hole):
     def __init__(self,alpha0,eta0,nu0,b0):
         super().__init__(alpha0,eta0,nu0)
@@ -176,53 +181,69 @@ def RK (x_n,y_n,h,s,particula):
     return(r)
 
 #creando todos los objetos
-miBH=black_hole(-40,3.252719443,1.76)
-miParticula=particula_time_like(-40,3.252719443,1.76,1,7e-7)
-miFoton=particula_null(1,12.52655373,1.52,0.225)
+miBH=black_hole(1,12.527,1.52) #branch negativo
+miParticula=particula_time_like(1,12.527,1.52,0,2.6e-6) #(bh,energia,J)
+#miFoton=particula_null(1,3.252719443,1.52,0.225) #(bh,b)
 
 ##caracteristicas de los objetos para grafica de potencial
 #generales
-r_apoyo=np.linspace(-5e11,5e11,5)
-r_schwarzschild=miBH.horizonte()*np.ones(len(r_apoyo))
-r_hairy=miBH.horizonte_hairy()*np.ones(len(r_apoyo))
-print(miBH.horizonte(),miBH.horizonte_hairy(),miBH.horizonte_hairy_x())
+#r_apoyo=np.linspace(-5e11,5e11,5)
+#r_schwarzschild=miBH.horizonte()*np.ones(len(r_apoyo))
+#r_hairy=miBH.horizonte_hairy()*np.ones(len(r_apoyo))
+#print(miBH.horizonte(),miBH.horizonte_hairy(),miBH.horizonte_hairy_x())
 
-#tipo time like
-r_min,U_min=miParticula.minimo()
-r_nul,U_nul=miParticula.U_nulo()
-r_max,U_max=miParticula.maximo()
-r,U=miParticula.potencial()
+##tipo time like
+#r_min,U_min=miParticula.minimo()
+#r_nul,U_nul=miParticula.U_nulo()
+#r_max,U_max=miParticula.maximo()
+#r,U=miParticula.potencial()
 
 
-#tipo null
-r_null,U_null=miFoton.potencial()
-rn_max,Un_max=miFoton.maximo()
+##tipo null
+#r_null,U_null=miFoton.potencial()
+#rn_max,Un_max=miFoton.maximo()
 
-##condiciones iniciales de los objetos para geodesicas
-x_n,y_n,theta_0=miFoton.cond_init(1)
+##condiciones iniciales de los objetos para geodesicas tipo time like
+x_n,y_n=miParticula.cond_init(2)
+
 
 #geodesicas null
-theta_end=1.5*ma.pi
+theta_end=2.5*ma.pi
 s=10000
-h=(theta_end-theta_0)/s
-theta=np.linspace(theta_0,theta_end,s)
-#r=RK(x_n,-y_n,h,s,miFoton)
+h=(theta_end-0)/s
+theta=np.linspace(0,theta_end,s)
+r=RK(x_n,-y_n,h,s,miParticula)
 
-#fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+#print(r[9289],theta[9289])
+
+fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}) #para que sea en polares sin necesidad de transformar
+ax.spines['polar'].set_visible(False) #para quitarle el borde feo
+
+#ax.set_yticks([])  #le quita todas las etiquetas en r
+#ax.set_xticks([])  #le quita todas las etiquetas de los angulos
+ax.plot(theta, r,dashes=[6, 2])
+ax.legend([f'Energía = {miParticula.energia}'])
+#ax.set_rmax(r.max())
+# ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks
+# ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
+#ax.grid(True)
+
+#ax.set_title("Desviación de Einstein", va='bottom')
+
 
 #ax.plot(theta, r)
 #ax.grid(True)
 #fig, ax = plt.subplots()
-#BH_schwarzschild = plt.Circle((0, 0), miBH.horizonte(), color='dimgrey')
-#BH_hairy=plt.Circle((0, 0), miBH.horizonte_hairy(), color='black')
+BH_schwarzschild = plt.Circle((0, 0), miBH.horizonte(),transform=ax.transData._b, color='dimgrey')
+BH_hairy=plt.Circle((0, 0), miBH.horizonte_hairy(), transform=ax.transData._b, color='black')
 
 #x=r*np.cos(theta)
 #y=r*np.sin(theta)
 
 #ax.set_xlim(-0.6,0.6)     
 #ax.set_ylim(-0.6,0.6)   
-#ax.add_artist(BH_schwarzschild)
-#ax.add_artist(BH_hairy)
+ax.add_artist(BH_schwarzschild)
+ax.add_artist(BH_hairy)
 #ax.plot(x,y)
 
 ##fill para time like
@@ -239,10 +260,13 @@ theta=np.linspace(theta_0,theta_end,s)
 #plt.xlim(0,1)      #lim para null
 #plt.ylim(-0.1e11,1.14e11)   #lim para null
 
-plt.xlim(0,1)       #lim para time_like
-plt.ylim(-0.4,1.4)   #lim para null_like
-
-plt.plot(r,U,r_schwarzschild,r_apoyo,r_hairy,r_apoyo)
+ax.set_rmax(2)       #lim para time_like
+ax.set_rticks([0.08, 1,2])  # Less radial ticks
+ax.set_xticks([0,theta[9289]-2*ma.pi])
+#plt.ylim(-0.4,1.4)   #lim para null_like
+ax.set_theta_zero_location("E",offset=-(theta[9289]/2+np.pi)/np.pi*180)
+#plt.plot(r,U,r_schwarzschild,r_apoyo,r_hairy,r_apoyo)
 #plt.plot(r_null,U_null,r_schwarzschild,r_apoyo,r_hairy,r_apoyo)
-plt.grid(True)
-plt.show()
+ax.set_rlabel_position(-50)
+ax.grid(True)
+plt.savefig('plot1.svg')
