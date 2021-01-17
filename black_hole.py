@@ -222,6 +222,9 @@ def RK(x_n, y_n, h, s, particula):
 # creando todos los objetos
 miBH = black_hole(1, 12.527, 1.52)  # branch negativo
 miParticula = particula_time_like(1, 12.527, 1.52, 0.1, 2.6e-6)  # (bh,energia,J)
+miParticula1 = particula_time_like(1, 12.527, 1.52, 0.11, 2.6e-6)  # (bh,energia,J)
+miParticula2 = particula_time_like(1, 12.527, 1.52, 0.12, 2.6e-6)  # (bh,energia,J)
+
 # miParticula=particula_null(1,3.252719443,1.52,0.225) #(bh,b)
 
 # caracteristicas de los objetos para grafica de potencial
@@ -244,7 +247,8 @@ miParticula = particula_time_like(1, 12.527, 1.52, 0.1, 2.6e-6)  # (bh,energia,J
 
 # condiciones iniciales de los objetos para geodesicas tipo time like
 x_n, y_n = miParticula.cond_init(2)
-
+x_n1, y_n1 = miParticula1.cond_init(2)
+x_n2, y_n2 = miParticula2.cond_init(2)
 
 # geodesicas null
 theta_end = 2.5*ma.pi
@@ -252,6 +256,8 @@ s = 10000
 h = (theta_end-0)/s
 theta = np.linspace(0, theta_end, s)
 r = RK(x_n, -y_n, h, s, miParticula)
+r1 = RK(x_n1, -y_n1, h, s, miParticula1)
+r2 = RK(x_n2, -y_n2, h, s, miParticula2)
 
 # print(r[9289],theta[9289])
 
@@ -261,8 +267,13 @@ ax.spines['polar'].set_visible(False)  # para quitarle el borde feo
 
 # ax.set_yticks([])  #le quita todas las etiquetas en r
 # ax.set_xticks([])  #le quita todas las etiquetas de los angulos
-ax.plot(theta, r, dashes=[6, 2])
-ax.legend([f'E = {miParticula.energia}'])
+l, = ax.plot(theta, r, dashes=[6, 2])
+l1, = ax.plot(theta, r1, dashes=[2, 2])
+l2, = ax.plot(theta, r2, dashes=[4, 2])
+
+
+ax.legend((l, l1, l2), (f'E = {miParticula.energia}', f'E = {miParticula1.energia}',f'E = {miParticula2.energia}'), loc='upper right', shadow=True)
+#ax.legend([f'E = {miParticula.energia}'])
 # ax.set_rmax(r.max())
 # ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks
 # ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
@@ -315,7 +326,7 @@ ax.grid(True)
 
 if isinstance(miParticula, particula_time_like):
     plt.savefig(
-        f'timeLike_alpha-{miParticula.alpha}_eta-{miParticula.eta}_nu-{miParticula.nu}_E-{miParticula.energia}_J-{miParticula.J}.svg')
+        f'timeLike_alpha-{miParticula.alpha}_eta-{miParticula.eta}_nu-{miParticula.nu}_E-{miParticula.energia} {miParticula1.energia} {miParticula2.energia}_J-{miParticula.J}.svg')
 
 elif isinstance(miParticula, particula_null):
     plt.savefig(
