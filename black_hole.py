@@ -221,8 +221,8 @@ def RK(x_n, y_n, h, s, particula):
 
 # creando todos los objetos
 miBH = black_hole(1, 12.527, 1.52)  # branch negativo
-miParticula = particula_time_like(1, 12.527, 1.52, 0, 2.6e-6)  # (bh,energia,J)
-# miFoton=particula_null(1,3.252719443,1.52,0.225) #(bh,b)
+miParticula = particula_time_like(1, 12.527, 1.52, 0.1, 2.6e-6)  # (bh,energia,J)
+# miParticula=particula_null(1,3.252719443,1.52,0.225) #(bh,b)
 
 # caracteristicas de los objetos para grafica de potencial
 # generales
@@ -302,11 +302,12 @@ ax.add_artist(BH_hairy)
 # plt.xlim(0,1)      #lim para null
 # plt.ylim(-0.1e11,1.14e11)   #lim para null
 
-ax.set_rmax(2)  # lim para time_like
-ax.set_rticks([0.08, 1, 2])  # Less radial ticks
-ax.set_xticks([0, theta[9289]-2*ma.pi])
+ax.set_rmax(1)  # lim para time_like
+ax.set_rticks([0.08, 0.5, 1])  # Less radial ticks
+ax.set_xticks([])
+#ax.set_xticks([0, theta[9289]-2*ma.pi])
 # plt.ylim(-0.4,1.4)   #lim para null_like
-ax.set_theta_zero_location("E", offset=-(theta[9289]/2+np.pi)/np.pi*180)
+#ax.set_theta_zero_location("E", offset=-(theta[9289]/2+np.pi)/np.pi*180)
 # plt.plot(r,U,r_schwarzschild,r_apoyo,r_hairy,r_apoyo)
 # plt.plot(r_null,U_null,r_schwarzschild,r_apoyo,r_hairy,r_apoyo)
 ax.set_rlabel_position(-50)
