@@ -221,9 +221,8 @@ def RK(x_n, y_n, h, s, particula):
 
 # creando todos los objetos
 miBH = black_hole(1, 12.527, 1.52)  # branch negativo
-miParticula = particula_time_like(1, 12.527, 1.52, 0.1, 2.6e-6)  # (bh,energia,J)
-miParticula1 = particula_time_like(1, 12.527, 1.52, 0.2, 2.6e-6)  # (bh,energia,J)
-miParticula2 = particula_time_like(1, 12.527, 1.52, 0.3, 2.6e-6)  # (bh,energia,J)
+miParticula = particula_time_like(1, 12.527, 1.52, -0.025, 2.6e-6)  # (bh,energia,J)
+
 
 # miParticula=particula_null(1,3.252719443,1.52,0.225) #(bh,b)
 
@@ -246,18 +245,14 @@ miParticula2 = particula_time_like(1, 12.527, 1.52, 0.3, 2.6e-6)  # (bh,energia,
 # rn_max,Un_max=miFoton.maximo()
 
 # condiciones iniciales de los objetos para geodesicas tipo time like
-x_n, y_n = miParticula.cond_init(2)
-x_n1, y_n1 = miParticula1.cond_init(2)
-x_n2, y_n2 = miParticula2.cond_init(2)
+x_n, y_n = miParticula.cond_init(0.4)
 
 # geodesicas null
-theta_end = 2.5*ma.pi
+theta_end = 15*ma.pi
 s = 10000
 h = (theta_end-0)/s
 theta = np.linspace(0, theta_end, s)
 r = RK(x_n, -y_n, h, s, miParticula)
-r1 = RK(x_n1, -y_n1, h, s, miParticula1)
-r2 = RK(x_n2, -y_n2, h, s, miParticula2)
 
 # print(r[9289],theta[9289])
 
@@ -267,13 +262,10 @@ ax.spines['polar'].set_visible(False)  # para quitarle el borde feo
 
 # ax.set_yticks([])  #le quita todas las etiquetas en r
 # ax.set_xticks([])  #le quita todas las etiquetas de los angulos
-l, = ax.plot(theta, r, dashes=[6, 2])
-l1, = ax.plot(theta, r1, dashes=[2, 2])
-l2, = ax.plot(theta, r2, dashes=[4, 2])
+ax.plot(theta, r, dashes=[4, 1])
 
-
-ax.legend((l, l1, l2), (f'E = {miParticula.energia}', f'E = {miParticula1.energia}',f'E = {miParticula2.energia}'), loc='upper right', shadow=True)
-#ax.legend([f'E = {miParticula.energia}'])
+#ax.legend((l, l1, l2), (f'E = {miParticula.energia}', f'E = {miParticula1.energia}',f'E = {miParticula2.energia}'), loc='upper right', shadow=True)
+ax.legend([f'E = {miParticula.energia}'], loc='upper right', shadow=True)
 # ax.set_rmax(r.max())
 # ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks
 # ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
@@ -313,8 +305,8 @@ ax.add_artist(BH_hairy)
 # plt.xlim(0,1)      #lim para null
 # plt.ylim(-0.1e11,1.14e11)   #lim para null
 
-ax.set_rmax(0.5)  # lim para time_like
-ax.set_rticks([0.08, 0.5])  # Less radial ticks
+ax.set_rmax(3)  # lim para time_like
+ax.set_rticks([0.08, 1, 2, 3])  # Less radial ticks
 ax.set_xticks([])
 #ax.set_xticks([0, theta[9289]-2*ma.pi])
 # plt.ylim(-0.4,1.4)   #lim para null_like
@@ -326,7 +318,7 @@ ax.grid(True)
 
 if isinstance(miParticula, particula_time_like):
     plt.savefig(
-        f'timeLike_alpha-{miParticula.alpha}_eta-{miParticula.eta}_nu-{miParticula.nu}_E-{miParticula.energia} {miParticula1.energia} {miParticula2.energia}_J-{miParticula.J}.svg')
+        f'timeLike_alpha-{miParticula.alpha}_eta-{miParticula.eta}_nu-{miParticula.nu}_E-{miParticula.energia}_J-{miParticula.J}.svg')
 
 elif isinstance(miParticula, particula_null):
     plt.savefig(
