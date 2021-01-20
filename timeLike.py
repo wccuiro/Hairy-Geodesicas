@@ -7,17 +7,17 @@ import os
 
 # creando todos los objetos
 miBH = bh.black_hole(-40, 3.252719443, 1.76)  # branch negativo
-miParticula = bh.particula_time_like(-40, 3.252719443, 1.76, 0, 7e-7)  # (bh,energia,J)
+miParticula = bh.particula_time_like(-40, 3.252719443, 1.76, -0.25, 7e-7)  # (bh,energia,J)
 
 #print(miBH.horizonte(),miBH.horizonte_hairy(),miBH.horizonte_hairy_x())
 print(miBH.masa())
 
 # condiciones iniciales de los objetos para geodesicas tipo time like
-x_n, y_n = miParticula.cond_init(1)
+x_n, y_n = miParticula.cond_init(0.2)
 print(x_n, y_n)
 
 # geodesicas null
-theta_end = 16/9*ma.pi
+theta_end = 8.5*ma.pi
 s = 10000
 h = (theta_end-0)/s
 theta = np.linspace(0, theta_end, s)
@@ -40,13 +40,13 @@ BH_hairy = plt.Circle((0, 0), miBH.horizonte_hairy(),
 ax.add_artist(BH_schwarzschild)
 ax.add_artist(BH_hairy)
 
-ax.set_rmax(1)  # lim para time_like
-ax.set_rticks([0.08, 0.5, 1])  # Less radial ticks
+ax.set_rmax(0.25)  # lim para time_like
+ax.set_rticks([0.08, 0.15, 0.25])  # Less radial ticks
 ax.set_xticks([])
 
 #ax.set_theta_zero_location("E", offset=-(theta[9289]/2+np.pi)/np.pi*180)
 
-ax.set_rlabel_position(-50)
+ax.set_rlabel_position(100)
 ax.grid(True)
 
 print(r.max())
