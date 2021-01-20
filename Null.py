@@ -1,5 +1,9 @@
 import black_hole as bh
 import matplotlib.pyplot as plt
+import numpy as np
+import math as ma
+
+import os
 
 # creando todos los objetos
 miBH = bh.black_hole(1, 12.527, 1.52)  # branch negativo

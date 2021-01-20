@@ -89,10 +89,9 @@ class particula_time_like(black_hole):
 
     def potencial(self):
         if self.alpha < 0:
-            x = np.linspace(1, 100, 100000)
+            x = np.linspace(1, 1000, 100000)
             U = self.U_potencial(x)
             r = self.omega(x)**(0.5)
-            print(r, U)
             return r, U
         elif self.alpha > 0:
             x = np.linspace(self.horizonte_hairy(), 1, 10000)
@@ -127,13 +126,24 @@ class particula_time_like(black_hole):
         return self.omega(x_nulo)**(0.5), self.U_potencial(x_nulo)
 
     def cond_init(self, r):
-        x_initial_guess = 0.83
-        def O_r(x): return self.nu ** 2 * x ** (self.nu - 1) / \
-            self.eta ** 2 / (x ** self.nu - 1) ** 2-r**2
-        x_radio = fsolve(O_r, x_initial_guess)
-        x_prima = ma.sqrt((self.energia-self.U_potencial(x_radio)
-                           )/(self.eta**2*self.J**2*self.__c**2))
-        return x_radio, x_prima
+        if self.alpha > 0:
+            x_initial_guess = 0.83
+            def O_r(x): return self.nu ** 2 * x ** (self.nu - 1) / \
+                self.eta ** 2 / (x ** self.nu - 1) ** 2-r**2
+            x_radio = fsolve(O_r, x_initial_guess)
+            x_prima = ma.sqrt((self.energia-self.U_potencial(x_radio)
+                            )/(self.eta**2*self.J**2*self.__c**2))
+            return x_radio, x_prima
+        elif self.alpha < 0:
+            x_initial_guess = 1.22
+            def O_r(x): return self.nu ** 2 * x ** (self.nu - 1) / \
+                self.eta ** 2 / (x ** self.nu - 1) ** 2-r**2
+            x_radio = fsolve(O_r, x_initial_guess)
+            x_prima = ma.sqrt((self.energia-self.U_potencial(x_radio)
+                            )/(self.eta**2*self.J**2*self.__c**2))
+            return x_radio, x_prima
+        else:
+            print("Alpha no puede ser 0")
 
     def funH(self, x):
         H = self.diff_U(x)/(2*self.J**2*self.__c**2*self.eta**2)
