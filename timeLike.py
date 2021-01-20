@@ -7,17 +7,17 @@ import os
 
 # creando todos los objetos
 miBH = bh.black_hole(-40, 3.252719443, 1.76)  # branch negativo
-miParticula = bh.particula_time_like(-40, 3.252719443, 1.76, -0.25, 7e-7)  # (bh,energia,J)
+miParticula = bh.particula_time_like(-40, 3.252719443, 1.76, 1, 7e-7)  # (bh,energia,J)
 
 #print(miBH.horizonte(),miBH.horizonte_hairy(),miBH.horizonte_hairy_x())
 print(miBH.masa())
 
 # condiciones iniciales de los objetos para geodesicas tipo time like
-x_n, y_n = miParticula.cond_init(0.2)
+x_n, y_n = miParticula.cond_init(0.25)
 print(x_n, y_n)
 
 # geodesicas null
-theta_end = 8.5*ma.pi
+theta_end = 2.5*ma.pi
 s = 10000
 h = (theta_end-0)/s
 theta = np.linspace(0, theta_end, s)
