@@ -28,4 +28,12 @@ plt.plot(r,U,r_schwarzschild,r_apoyo,r_hairy,r_apoyo)
 
 plt.grid(True)
 
-plt.show()
+
+try:
+    os.mkdir('./Figures')
+    os.mkdir(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}')
+    os.mkdir(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}/Time_Like_Potencial')
+except FileExistsError:
+    print("Listo")
+
+plt.savefig(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}/Time_Like_Potencial/J={miParticula.J}.svg')

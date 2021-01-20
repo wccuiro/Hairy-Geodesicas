@@ -1,5 +1,9 @@
 import black_hole as bh
 import matplotlib.pyplot as plt
+import math as ma
+import numpy as np
+
+import os
 
 # creando todos los objetos
 miBH = bh.black_hole(1, 12.527, 1.52)  # branch negativo
@@ -42,6 +46,12 @@ ax.set_xticks([])
 ax.set_rlabel_position(-50)
 ax.grid(True)
 
-plt.savefig(
-        f'timeLike_alpha-{miParticula.alpha}_eta-{miParticula.eta}_nu-{miParticula.nu}_E-{miParticula.energia}_J-{miParticula.J}.svg')
 
+try:
+    os.mkdir('./Figures')
+    os.mkdir(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}')
+    os.mkdir(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}/timeLike_orbits')
+except FileExistsError:
+    print("Listo")
+
+plt.savefig(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}/timeLike_orbits/E={miParticula.energia}_J={miParticula.J}.svg')

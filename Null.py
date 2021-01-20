@@ -40,10 +40,16 @@ ax.set_rmax(3)  # lim para time_like
 ax.set_rticks([0.08, 1, 2, 3])  # Less radial ticks
 ax.set_xticks([])
 
-#ax.set_theta_zero_location("E", offset=-(theta[9289]/2+np.pi)/np.pi*180)
+
 
 ax.set_rlabel_position(-50)
 ax.grid(True)
 
-plt.savefig(
-        f'null_alpha-{miParticula.alpha}_eta-{miParticula.eta}_nu-{miParticula.nu}_b-{miParticula.b}.svg')
+try:
+    os.mkdir('./Figures')
+    os.mkdir(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}')
+    os.mkdir(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}/Null_orbits')
+except FileExistsError:
+    print("Listo")
+
+plt.savefig(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}/Null_orbits/b={miParticula.b}.svg')

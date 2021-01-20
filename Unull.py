@@ -30,4 +30,10 @@ plt.plot(r_null,U_null,r_schwarzschild,r_apoyo,r_hairy,r_apoyo)
 
 plt.grid(True)
 
-plt.show()
+try:
+    os.mkdir('./Figures')
+    os.mkdir(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}')
+except FileExistsError:
+    print("Listo")
+
+plt.savefig(f'./Figures/alpha={miParticula.alpha}_eta={miParticula.eta}_nu={miParticula.nu}/Null_Potencial.svg')
