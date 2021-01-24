@@ -6,8 +6,8 @@ import numpy as np
 import os
 
 # creando todos los objetos
-miBH = bh.black_hole(-40, 3.252719443, 1.76)  # branch negativo
-miParticula = bh.particula_time_like(-40, 3.252719443, 1.76, 1, 7e-7)  # (bh,energia,J)
+miBH = bh.black_hole(1, 12.52655373, 1.4)  # branch negativo
+miParticula = bh.particula_time_like(1, 12.52655373, 1.4, 1, 2.6e-6)  # (bh,energia,J)
 # miParticula1 = bh.particula_time_like(-40, 3.252719443, 1.76, 5, 7e-7)  # (bh,energia,J)
 # miParticula2 = bh.particula_time_like(-40, 3.252719443, 1.76, 10, 7e-7)  # (bh,energia,J)
 
@@ -22,11 +22,11 @@ print(x_n, y_n)
 # x_n2, y_n2 = miParticula2.cond_init(2)
 
 # geodesicas null
-theta_end = 2.5*ma.pi
+theta_end = 1.5*ma.pi
 s = 10000
 h = (theta_end-0)/s
 theta = np.linspace(0, theta_end, s)
-r = bh.RK(x_n, y_n, h, s, miParticula)
+r = bh.RK(x_n, -y_n, h, s, miParticula)
 print(r)
 
 # r1 = bh.RK(x_n1, y_n1, h, s, miParticula1)
