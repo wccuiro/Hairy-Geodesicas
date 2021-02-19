@@ -6,8 +6,8 @@ import math as ma
 import os
 
 # creando todos los objetos
-miBH = bh.black_hole(-40, 3.252719443, 1.76)  # branch negativo
-miParticula = bh.particula_null(-40, 3.252719443, 1.76, 0.03)  # (bh,b)
+miBH = bh.black_hole(1, 12.52655373, 1.52)  # branch negativo
+miParticula = bh.particula_null(1, 12.52655373, 1.52, 0.1)  # (bh,b)
 
 # condiciones iniciales de los objetos para geodesicas tipo null
 x_n, y_n, theta_n = miParticula.cond_init(1)
@@ -15,11 +15,11 @@ x_n, y_n, theta_n = miParticula.cond_init(1)
 print(theta_n)
 
 # geodesicas null
-theta_end = 1.7*ma.pi+theta_n
+theta_end = 1.2*ma.pi+theta_n
 s = 10000
 h = (theta_end-theta_n)/s
 theta = np.linspace(theta_n, theta_end, s)
-r = bh.RK(x_n, y_n, h, s, miParticula)
+r = bh.RK(x_n, -y_n, h, s, miParticula)
 
 # para que sea en polares sin necesidad de transformar
 fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
@@ -43,7 +43,7 @@ ax.add_artist(BH_schwarzschild)
 ax.add_artist(BH_hairy)
 
 ax.set_rmax(0.15)  # lim para time_like
-ax.set_rticks([0.08, 0.15])  # Less radial ticks
+ax.set_rticks([0.01, 0.08, 0.15])  # Less radial ticks
 ax.set_xticks([])
 
 
