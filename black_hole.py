@@ -166,12 +166,12 @@ class particula_null(black_hole):
 
     def potencial(self):
         if self.alpha < 0:
-            x = np.linspace(1, 1000000, 10000)
+            x = np.linspace(1, 1000000, 1000000)
             U = self.U_potencial(x)
             r = self.omega(x)**(0.5)
             return r, U
         elif self.alpha > 0:
-            x = np.linspace(self.horizonte_hairy(), 1, 10000)
+            x = np.linspace(0, 1, 1000000)
             U = self.U_potencial(x)
             r = self.omega(x)**(0.5)
             return r, U
@@ -179,7 +179,8 @@ class particula_null(black_hole):
             print("alpha no puede ser 0")
 
     def maximo(self):
-        x_inicial = float(self.horizonte_hairy_x())
+        #x_inicial = float(self.horizonte_hairy_x())
+        x_inicial = 0.01  #momentaneo
         x_max = fsolve(self.diff_f, x_inicial)
         return self.omega(x_max)**(0.5), self.U_potencial(x_max)
 
