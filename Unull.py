@@ -47,12 +47,13 @@ plt.plot(r_hairy, r_apoyo,  dashes=[4, 1], linewidth=3, color='black')
 plt.annotate('Event Horizon',
             xy=(65, 290), xycoords='figure points', fontsize=10, fontstyle='italic', fontfamily='serif')
 
-plt.annotate('Región - I',
+plt.annotate('Region - I',
             xy=(190, 270), xycoords='figure points', fontsize=20, fontstyle='italic', fontfamily='serif')
 
-plt.annotate('Región - II',
+plt.annotate('Region - II',
             xy=(190, 170), xycoords='figure points', fontsize=20, fontstyle='italic', fontfamily='serif')
 
+plt.title(r'$\dfrac{G_{N}M}{c^2}=0.04 [AU],\alpha = 1 [AU]^{-2}, \eta = 12.527 [AU]^{-1}$', pad=20)
 
 #plt.grid(True)
 
