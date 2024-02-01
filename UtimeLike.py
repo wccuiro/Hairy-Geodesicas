@@ -6,8 +6,16 @@ import math as ma
 import os
 
 # creando todos los objetos
-miBH = bh.black_hole(-40, 3.252719443, 1.76)  # branch negativo
-miParticula = bh.particula_time_like(-40,3.252719443,1.76,0, 7e-7) #(bh,b)
+alpha_parameter = 1
+masa_parameter = 1
+P_function = np.sign(alpha_parameter)*1 + np.sign(alpha_parameter)*18*alpha_parameter*masa_parameter**2 + 6*np.sqrt(9*(alpha_parameter**2)*(masa_parameter**4) + alpha_parameter*masa_parameter**2)
+eta_parameter = (np.power(P_function,1/3) + np.power(P_function,-1/3) + np.sign(alpha_parameter))/(6*masa_parameter)
+nu_parameter = 2.52
+angularMomentum_parameter = 5
+energy_parameter = 0
+miBH = bh.black_hole(alpha_parameter, eta_parameter, nu_parameter)  # branch negativo
+miParticula = bh.particula_time_like(alpha_parameter, eta_parameter, nu_parameter, energy_parameter, angularMomentum_parameter)  # 
+
 
 # caracteristicas de los objetos para grafica de potencial
 r_apoyo=np.linspace(-5e11,5e11,5)
@@ -21,6 +29,8 @@ r_nul,U_nul=miParticula.U_nulo()
 r_max,U_max=miParticula.maximo()
 r,U=miParticula.potencial()
 
+print(r_min,U_min)
+
 # # fill para time like
 # plt.fill_between(r_apoyo, U_max, 50,facecolor='aquamarine')
 # plt.fill_between(r_apoyo, U_nul, U_max,facecolor='violet')
@@ -29,8 +39,8 @@ r,U=miParticula.potencial()
 
 plt.plot(r,U,r_schwarzschild,r_apoyo,r_hairy,r_apoyo)
 
-plt.xlim(0,0.5)
-plt.ylim(-0.5,1.5)
+plt.xlim(0,100)
+plt.ylim(-0.25,0.5)
 
 plt.grid(True)
 

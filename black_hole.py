@@ -6,8 +6,8 @@ import math as ma
 
 class black_hole():
     def __init__(self, alpha0, eta0, nu0):
-        self.__c = 6.407e4
-        self.__G = 39.309
+        self.__c = 1
+        self.__G = 1
         self.alpha = alpha0
         self.eta = eta0
         self.nu = nu0
@@ -78,8 +78,8 @@ class black_hole():
 class particula_time_like(black_hole):
     def __init__(self, alpha0, eta0, nu0, energia0, J0):
         super().__init__(alpha0, eta0, nu0)
-        self.__c = 6.407e4
-        self.__G = 39.309
+        self.__c = 1
+        self.__G = 1
         self.energia = energia0
         self.J = J0
 
@@ -89,12 +89,12 @@ class particula_time_like(black_hole):
 
     def potencial(self):
         if self.alpha < 0:
-            x = np.linspace(1, 1000, 100000)
+            x = np.linspace(1, 100000, 1000000)
             U = self.U_potencial(x)
             r = self.omega(x)**(0.5)
             return r, U
         elif self.alpha > 0:
-            x = np.linspace(self.horizonte_hairy(), 1, 10000)
+            x = np.linspace(0, 1, 100000)
             U = self.U_potencial(x)
             r = self.omega(x)**(0.5)
             return r, U
@@ -127,7 +127,7 @@ class particula_time_like(black_hole):
 
     def cond_init(self, r):
         if self.alpha > 0:
-            x_initial_guess = 0.83
+            x_initial_guess = 0.93
             def O_r(x): return self.nu ** 2 * x ** (self.nu - 1) / \
                 self.eta ** 2 / (x ** self.nu - 1) ** 2-r**2
             x_radio = fsolve(O_r, x_initial_guess)
@@ -156,8 +156,8 @@ class particula_time_like(black_hole):
 class particula_null(black_hole):
     def __init__(self, alpha0, eta0, nu0, b0):
         super().__init__(alpha0, eta0, nu0)
-        self.__c = 6.407e4
-        self.__G = 39.309
+        self.__c = 1
+        self.__G = 1
         self.b = b0
 
     def U_potencial(self, x):
@@ -204,7 +204,8 @@ class particula_null(black_hole):
 
 def RK(x_n, y_n, h, s, particula):
     r = np.array([])
-
+    E = np.array([particula.energia])
+    # print(E[-1])
     # punto de referencia
     for i in range(s):
         r_n = particula.omega(x_n)**0.5
@@ -227,4 +228,8 @@ def RK(x_n, y_n, h, s, particula):
 
         y_n = y_n1
         x_n = x_n1
-    return(r)   
+        
+        E_n = particula.eta**2*particula.J**2*((k_0+2*k_1+2*k_2+k_3)/(6*h))**2 + particula.U_potencial(x_n)
+        E = np.append(E, E_n)
+        # print(E_n)
+    return(r,E)   
